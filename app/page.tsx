@@ -87,6 +87,7 @@ export default function Home() {
                 onUpdate={handleUpdateTrack}
                 onCancelEdit={handleCancelEdit}
                 editingTrack={editingTrack}
+                tracks={tracks}
               />
             </div>
           </section>

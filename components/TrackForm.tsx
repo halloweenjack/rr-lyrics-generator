@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { TrackEntry } from "@/lib/types";
 import { useLocale } from "@/lib/LocaleContext";
 import LyricsSearchLinks from "./LyricsSearchLinks";
@@ -10,6 +10,7 @@ interface TrackFormProps {
   onUpdate: (track: TrackEntry) => void;
   onCancelEdit: () => void;
   editingTrack?: TrackEntry;
+  tracks: TrackEntry[];
 }
 
 // Parse filename to extract track number and song title
@@ -25,7 +26,24 @@ function parseFilename(filename: string): { trackNumber: string; songTitle: stri
   return { trackNumber: "", songTitle: filename };
 }
 
-export default function TrackForm({ onAdd, onUpdate, onCancelEdit, editingTrack }: TrackFormProps) {
+// Calculate next track number based on existing tracks
+function getNextTrackNumber(tracks: TrackEntry[]): string {
+  if (tracks.length === 0) return "1";
+
+  const trackNumbers = tracks
+    .map((t) => {
+      const { trackNumber } = parseFilename(t.filename);
+      return parseInt(trackNumber, 10);
+    })
+    .filter((n) => !isNaN(n));
+
+  if (trackNumbers.length === 0) return "1";
+
+  const maxNumber = Math.max(...trackNumbers);
+  return String(maxNumber + 1);
+}
+
+export default function TrackForm({ onAdd, onUpdate, onCancelEdit, editingTrack, tracks }: TrackFormProps) {
   const { t } = useLocale();
   const [trackNumber, setTrackNumber] = useState("");
   const [songTitle, setSongTitle] = useState("");
@@ -33,6 +51,19 @@ export default function TrackForm({ onAdd, onUpdate, onCancelEdit, editingTrack 
   const [lyricist, setLyricist] = useState("");
   const [composer, setComposer] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Set initial track number on mount and after adding
+  const setNextTrackNumber = useCallback(() => {
+    const next = getNextTrackNumber(tracks);
+    setTrackNumber(next);
+  }, [tracks]);
+
+  // Initialize track number on first render
+  useEffect(() => {
+    if (!editingTrack) {
+      setNextTrackNumber();
+    }
+  }, []); // Only on mount
 
   // Populate form when editingTrack changes
   useEffect(() => {
@@ -53,6 +84,20 @@ export default function TrackForm({ onAdd, onUpdate, onCancelEdit, editingTrack 
       ? `${trackNumber.padStart(2, "0")} - ${songTitle}`
       : trackNumber.padStart(2, "0")
     : "";
+
+  const clearFormAndSetNextNumber = useCallback(() => {
+    setSongTitle("");
+    setLyrics("");
+    setLyricist("");
+    setComposer("");
+    setSearchQuery("");
+    // Set next track number after a brief delay to account for the new track being added
+    setTimeout(() => {
+      const next = getNextTrackNumber(tracks);
+      // Add 1 more since the new track isn't in tracks yet when this runs
+      setTrackNumber(String(parseInt(next, 10) + 1));
+    }, 0);
+  }, [tracks]);
 
   const clearForm = () => {
     setTrackNumber("");
@@ -75,6 +120,8 @@ export default function TrackForm({ onAdd, onUpdate, onCancelEdit, editingTrack 
         lyricist: lyricist.trim() || undefined,
         composer: composer.trim() || undefined,
       });
+      clearForm();
+      setNextTrackNumber();
     } else {
       onAdd({
         id: crypto.randomUUID(),
@@ -83,13 +130,13 @@ export default function TrackForm({ onAdd, onUpdate, onCancelEdit, editingTrack 
         lyricist: lyricist.trim() || undefined,
         composer: composer.trim() || undefined,
       });
+      clearFormAndSetNextNumber();
     }
-
-    clearForm();
   };
 
   const handleCancel = () => {
     clearForm();
+    setNextTrackNumber();
     onCancelEdit();
   };
 
