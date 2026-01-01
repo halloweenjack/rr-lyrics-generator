@@ -103,7 +103,7 @@ export default function Home() {
               href="https://github.com/kat/Record-Rack"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-amber-500 hover:text-amber-400"
+              className="text-rose-500 hover:text-rose-400"
             >
               Record Rack
             </a>{" "}

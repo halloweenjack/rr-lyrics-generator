@@ -97,7 +97,7 @@ export default function FileImport({ onImport }: FileImportProps) {
       <div
         className={`relative border-2 border-dashed rounded-lg p-4 transition-colors ${
           isDragging
-            ? "border-amber-500 bg-amber-500/10"
+            ? "border-rose-500 bg-rose-500/10"
             : "border-zinc-700 hover:border-zinc-600"
         }`}
         onDragOver={handleDragOver}
@@ -126,7 +126,7 @@ export default function FileImport({ onImport }: FileImportProps) {
           </svg>
           <span className="text-sm">
             Drop .rr.json file here or{" "}
-            <span className="text-amber-500 hover:text-amber-400">browse</span>
+            <span className="text-rose-500 hover:text-rose-400">browse</span>
           </span>
         </div>
       </div>

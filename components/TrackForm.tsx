@@ -107,7 +107,7 @@ export default function TrackForm({ onAdd, onUpdate, onCancelEdit, editingTrack 
             value={trackNumber}
             onChange={(e) => setTrackNumber(e.target.value.replace(/\D/g, "").slice(0, 2))}
             placeholder="01"
-            className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent text-center"
+            className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent text-center"
           />
         </div>
         <div>
@@ -126,7 +126,7 @@ export default function TrackForm({ onAdd, onUpdate, onCancelEdit, editingTrack 
               setSearchQuery(e.target.value);
             }}
             placeholder="Title"
-            className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+            className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
           />
         </div>
       </div>
@@ -134,7 +134,7 @@ export default function TrackForm({ onAdd, onUpdate, onCancelEdit, editingTrack 
       {generatedFilename && (
         <div className="px-3 py-2 bg-zinc-800/50 rounded-lg border border-zinc-700/50">
           <span className="text-xs text-zinc-500">Filename: </span>
-          <span className="text-sm text-amber-400 font-mono">{generatedFilename}</span>
+          <span className="text-sm text-rose-400 font-mono">{generatedFilename}</span>
         </div>
       )}
 
@@ -151,7 +151,7 @@ export default function TrackForm({ onAdd, onUpdate, onCancelEdit, editingTrack 
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Song title or artist name"
-          className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+          className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
         />
         {searchQuery && <LyricsSearchLinks query={searchQuery} />}
       </div>
@@ -169,7 +169,7 @@ export default function TrackForm({ onAdd, onUpdate, onCancelEdit, editingTrack 
           onChange={(e) => setLyrics(e.target.value)}
           placeholder="Paste lyrics here..."
           rows={8}
-          className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-y"
+          className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent resize-y"
         />
       </div>
 
@@ -187,7 +187,7 @@ export default function TrackForm({ onAdd, onUpdate, onCancelEdit, editingTrack 
             value={lyricist}
             onChange={(e) => setLyricist(e.target.value)}
             placeholder="Lyrics by..."
-            className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+            className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
           />
         </div>
         <div>
@@ -203,7 +203,7 @@ export default function TrackForm({ onAdd, onUpdate, onCancelEdit, editingTrack 
             value={composer}
             onChange={(e) => setComposer(e.target.value)}
             placeholder="Music by..."
-            className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+            className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
           />
         </div>
       </div>
@@ -221,7 +221,7 @@ export default function TrackForm({ onAdd, onUpdate, onCancelEdit, editingTrack 
         <button
           type="submit"
           disabled={!generatedFilename || !lyrics.trim()}
-          className="w-full py-3 px-4 bg-amber-600 hover:bg-amber-500 disabled:bg-zinc-700 disabled:text-zinc-500 text-white font-medium rounded-lg transition-colors"
+          className="w-full py-3 px-4 bg-rose-600 hover:bg-rose-500 disabled:bg-zinc-700 disabled:text-zinc-500 text-white font-medium rounded-lg transition-colors"
         >
           {editingTrack ? "Update Track" : "Add Track"}
         </button>

@@ -67,7 +67,7 @@ export default function Preview({ tracks }: PreviewProps) {
             value={outputFilename}
             onChange={(e) => setOutputFilename(e.target.value)}
             placeholder="lyrics"
-            className="flex-1 px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+            className="flex-1 px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
           />
           <span className="text-zinc-400">.rr.json</span>
         </div>
@@ -78,7 +78,7 @@ export default function Preview({ tracks }: PreviewProps) {
           <h3 className="text-sm font-medium text-zinc-300">Preview</h3>
           <button
             onClick={handleCopy}
-            className="text-sm text-amber-500 hover:text-amber-400 transition-colors"
+            className="text-sm text-rose-500 hover:text-rose-400 transition-colors"
           >
             {copied ? "Copied!" : "Copy"}
           </button>
@@ -91,7 +91,7 @@ export default function Preview({ tracks }: PreviewProps) {
       <button
         onClick={handleDownload}
         disabled={tracks.length === 0}
-        className="w-full py-3 px-4 bg-amber-600 hover:bg-amber-500 disabled:bg-zinc-700 disabled:text-zinc-500 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+        className="w-full py-3 px-4 bg-rose-600 hover:bg-rose-500 disabled:bg-zinc-700 disabled:text-zinc-500 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

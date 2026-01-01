@@ -30,7 +30,7 @@ export default function TrackList({ tracks, onRemove, onEdit, editingId }: Track
             key={track.id}
             className={`flex items-center justify-between px-4 py-3 rounded-lg border cursor-pointer transition-colors ${
               editingId === track.id
-                ? "bg-amber-900/30 border-amber-600"
+                ? "bg-rose-900/30 border-rose-600"
                 : "bg-zinc-800 border-zinc-700 hover:border-zinc-600"
             }`}
             onClick={() => onEdit(track)}
