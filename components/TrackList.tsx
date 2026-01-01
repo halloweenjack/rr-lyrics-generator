@@ -5,9 +5,11 @@ import { TrackEntry } from "@/lib/types";
 interface TrackListProps {
   tracks: TrackEntry[];
   onRemove: (id: string) => void;
+  onEdit: (track: TrackEntry) => void;
+  editingId?: string;
 }
 
-export default function TrackList({ tracks, onRemove }: TrackListProps) {
+export default function TrackList({ tracks, onRemove, onEdit, editingId }: TrackListProps) {
   if (tracks.length === 0) {
     return (
       <div className="text-center py-8 text-zinc-500">
@@ -26,7 +28,12 @@ export default function TrackList({ tracks, onRemove }: TrackListProps) {
         {tracks.map((track) => (
           <li
             key={track.id}
-            className="flex items-center justify-between px-4 py-3 bg-zinc-800 rounded-lg border border-zinc-700"
+            className={`flex items-center justify-between px-4 py-3 rounded-lg border cursor-pointer transition-colors ${
+              editingId === track.id
+                ? "bg-amber-900/30 border-amber-600"
+                : "bg-zinc-800 border-zinc-700 hover:border-zinc-600"
+            }`}
+            onClick={() => onEdit(track)}
           >
             <div className="flex-1 min-w-0">
               <p className="text-white font-medium truncate">{track.filename}</p>
@@ -36,7 +43,10 @@ export default function TrackList({ tracks, onRemove }: TrackListProps) {
               </p>
             </div>
             <button
-              onClick={() => onRemove(track.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onRemove(track.id);
+              }}
               className="ml-4 p-2 text-zinc-500 hover:text-red-400 transition-colors"
               aria-label="Remove track"
             >

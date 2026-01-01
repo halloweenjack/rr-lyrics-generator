@@ -9,13 +9,30 @@ import FileImport from "@/components/FileImport";
 
 export default function Home() {
   const [tracks, setTracks] = useState<TrackEntry[]>([]);
+  const [editingTrack, setEditingTrack] = useState<TrackEntry | undefined>(undefined);
 
   const handleAddTrack = (track: TrackEntry) => {
     setTracks((prev) => [...prev, track]);
   };
 
+  const handleUpdateTrack = (track: TrackEntry) => {
+    setTracks((prev) => prev.map((t) => (t.id === track.id ? track : t)));
+    setEditingTrack(undefined);
+  };
+
   const handleRemoveTrack = (id: string) => {
     setTracks((prev) => prev.filter((t) => t.id !== id));
+    if (editingTrack?.id === id) {
+      setEditingTrack(undefined);
+    }
+  };
+
+  const handleEditTrack = (track: TrackEntry) => {
+    setEditingTrack(track);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingTrack(undefined);
   };
 
   const handleImportTracks = (importedTracks: TrackEntry[]) => {
@@ -47,13 +64,23 @@ export default function Home() {
           <section className="space-y-6">
             <div className="p-6 bg-zinc-900 rounded-xl border border-zinc-800">
               <h2 className="text-lg font-semibold text-white mb-4">
-                Add Track
+                {editingTrack ? "Edit Track" : "Add Track"}
               </h2>
-              <TrackForm onAdd={handleAddTrack} />
+              <TrackForm
+                onAdd={handleAddTrack}
+                onUpdate={handleUpdateTrack}
+                onCancelEdit={handleCancelEdit}
+                editingTrack={editingTrack}
+              />
             </div>
 
             <div className="p-6 bg-zinc-900 rounded-xl border border-zinc-800">
-              <TrackList tracks={tracks} onRemove={handleRemoveTrack} />
+              <TrackList
+                tracks={tracks}
+                onRemove={handleRemoveTrack}
+                onEdit={handleEditTrack}
+                editingId={editingTrack?.id}
+              />
             </div>
           </section>
 

@@ -1,20 +1,49 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TrackEntry } from "@/lib/types";
 import LyricsSearchLinks from "./LyricsSearchLinks";
 
 interface TrackFormProps {
   onAdd: (track: TrackEntry) => void;
+  onUpdate: (track: TrackEntry) => void;
+  onCancelEdit: () => void;
+  editingTrack?: TrackEntry;
 }
 
-export default function TrackForm({ onAdd }: TrackFormProps) {
+// Parse filename to extract track number and song title
+function parseFilename(filename: string): { trackNumber: string; songTitle: string } {
+  const match = filename.match(/^(\d+)\s*[-–]\s*(.+)$/);
+  if (match) {
+    return { trackNumber: match[1], songTitle: match[2] };
+  }
+  const numMatch = filename.match(/^(\d+)$/);
+  if (numMatch) {
+    return { trackNumber: numMatch[1], songTitle: "" };
+  }
+  return { trackNumber: "", songTitle: filename };
+}
+
+export default function TrackForm({ onAdd, onUpdate, onCancelEdit, editingTrack }: TrackFormProps) {
   const [trackNumber, setTrackNumber] = useState("");
   const [songTitle, setSongTitle] = useState("");
   const [lyrics, setLyrics] = useState("");
   const [lyricist, setLyricist] = useState("");
   const [composer, setComposer] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Populate form when editingTrack changes
+  useEffect(() => {
+    if (editingTrack) {
+      const { trackNumber: num, songTitle: title } = parseFilename(editingTrack.filename);
+      setTrackNumber(num);
+      setSongTitle(title);
+      setLyrics(editingTrack.lyrics);
+      setLyricist(editingTrack.lyricist || "");
+      setComposer(editingTrack.composer || "");
+      setSearchQuery(title);
+    }
+  }, [editingTrack]);
 
   // Generate filename from parts (only track number is required for matching)
   const generatedFilename = trackNumber
@@ -23,24 +52,43 @@ export default function TrackForm({ onAdd }: TrackFormProps) {
       : trackNumber.padStart(2, "0")
     : "";
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!generatedFilename || !lyrics.trim()) return;
-
-    onAdd({
-      id: crypto.randomUUID(),
-      filename: generatedFilename,
-      lyrics: lyrics.trim(),
-      lyricist: lyricist.trim() || undefined,
-      composer: composer.trim() || undefined,
-    });
-
+  const clearForm = () => {
     setTrackNumber("");
     setSongTitle("");
     setLyrics("");
     setLyricist("");
     setComposer("");
     setSearchQuery("");
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!generatedFilename || !lyrics.trim()) return;
+
+    if (editingTrack) {
+      onUpdate({
+        id: editingTrack.id,
+        filename: generatedFilename,
+        lyrics: lyrics.trim(),
+        lyricist: lyricist.trim() || undefined,
+        composer: composer.trim() || undefined,
+      });
+    } else {
+      onAdd({
+        id: crypto.randomUUID(),
+        filename: generatedFilename,
+        lyrics: lyrics.trim(),
+        lyricist: lyricist.trim() || undefined,
+        composer: composer.trim() || undefined,
+      });
+    }
+
+    clearForm();
+  };
+
+  const handleCancel = () => {
+    clearForm();
+    onCancelEdit();
   };
 
   return (
@@ -160,13 +208,24 @@ export default function TrackForm({ onAdd }: TrackFormProps) {
         </div>
       </div>
 
-      <button
-        type="submit"
-        disabled={!generatedFilename || !lyrics.trim()}
-        className="w-full py-3 px-4 bg-amber-600 hover:bg-amber-500 disabled:bg-zinc-700 disabled:text-zinc-500 text-white font-medium rounded-lg transition-colors"
-      >
-        Add Track
-      </button>
+      <div className={editingTrack ? "grid grid-cols-2 gap-2" : ""}>
+        {editingTrack && (
+          <button
+            type="button"
+            onClick={handleCancel}
+            className="w-full py-3 px-4 bg-zinc-700 hover:bg-zinc-600 text-white font-medium rounded-lg transition-colors"
+          >
+            Cancel
+          </button>
+        )}
+        <button
+          type="submit"
+          disabled={!generatedFilename || !lyrics.trim()}
+          className="w-full py-3 px-4 bg-amber-600 hover:bg-amber-500 disabled:bg-zinc-700 disabled:text-zinc-500 text-white font-medium rounded-lg transition-colors"
+        >
+          {editingTrack ? "Update Track" : "Add Track"}
+        </button>
+      </div>
     </form>
   );
 }
