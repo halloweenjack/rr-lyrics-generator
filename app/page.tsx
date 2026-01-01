@@ -45,7 +45,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-zinc-950">
       <header className="border-b border-zinc-800">
-        <div className="max-w-4xl mx-auto px-4 py-6">
+        <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-start justify-between gap-4">
             <div>
               <div className="flex items-center gap-4">
@@ -65,9 +65,10 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <section className="space-y-6">
+      <main className="max-w-7xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left: Add/Edit Track Form */}
+          <section>
             <div className="p-6 bg-zinc-900 rounded-xl border border-zinc-800">
               <h2 className="text-lg font-semibold text-white mb-4">
                 {editingTrack ? t("form.title.edit") : t("form.title.add")}
@@ -79,8 +80,11 @@ export default function Home() {
                 editingTrack={editingTrack}
               />
             </div>
+          </section>
 
-            <div className="p-6 bg-zinc-900 rounded-xl border border-zinc-800">
+          {/* Middle: Track List */}
+          <section>
+            <div className="p-6 bg-zinc-900 rounded-xl border border-zinc-800 sticky top-8">
               <TrackList
                 tracks={tracks}
                 onRemove={handleRemoveTrack}
@@ -90,6 +94,7 @@ export default function Home() {
             </div>
           </section>
 
+          {/* Right: Preview & Download */}
           <section>
             <div className="p-6 bg-zinc-900 rounded-xl border border-zinc-800 sticky top-8">
               <h2 className="text-lg font-semibold text-white mb-4">
@@ -102,7 +107,7 @@ export default function Home() {
       </main>
 
       <footer className="border-t border-zinc-800 mt-16">
-        <div className="max-w-4xl mx-auto px-4 py-6 text-center text-zinc-500 text-sm">
+        <div className="max-w-7xl mx-auto px-4 py-6 text-center text-zinc-500 text-sm">
           <p>
             {t("footer.prefix")}{t("footer.prefix") ? " " : ""}
             <a
