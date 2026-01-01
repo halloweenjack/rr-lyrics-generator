@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { TrackEntry, RRJson, ExtendedLyricsEntry } from "@/lib/types";
+import { useLocale } from "@/lib/LocaleContext";
 
 interface FileImportProps {
   onImport: (tracks: TrackEntry[]) => void;
@@ -29,6 +30,7 @@ function parseRRJson(json: RRJson): TrackEntry[] {
 }
 
 export default function FileImport({ onImport }: FileImportProps) {
+  const { t } = useLocale();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -37,7 +39,7 @@ export default function FileImport({ onImport }: FileImportProps) {
     setError(null);
 
     if (!file.name.endsWith(".rr.json") && !file.name.endsWith(".json")) {
-      setError("Please select a .rr.json file");
+      setError(t("import.error.invalid_format"));
       return;
     }
 
@@ -46,20 +48,20 @@ export default function FileImport({ onImport }: FileImportProps) {
       const json = JSON.parse(text) as RRJson;
 
       if (typeof json !== "object" || json === null || Array.isArray(json)) {
-        setError("Invalid JSON format. Expected an object.");
+        setError(t("import.error.invalid_json"));
         return;
       }
 
       const tracks = parseRRJson(json);
 
       if (tracks.length === 0) {
-        setError("No tracks found in the file.");
+        setError(t("import.error.empty"));
         return;
       }
 
       onImport(tracks);
     } catch {
-      setError("Failed to parse JSON file.");
+      setError(t("import.error.parse_failed"));
     }
   };
 
@@ -125,8 +127,8 @@ export default function FileImport({ onImport }: FileImportProps) {
             />
           </svg>
           <span className="text-sm">
-            Drop .rr.json file here or{" "}
-            <span className="text-rose-500 hover:text-rose-400">browse</span>
+            {t("import.dropzone")}{" "}
+            <span className="text-rose-500 hover:text-rose-400">{t("import.browse")}</span>
           </span>
         </div>
       </div>

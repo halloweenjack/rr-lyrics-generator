@@ -1,6 +1,7 @@
 "use client";
 
 import { TrackEntry } from "@/lib/types";
+import { useLocale } from "@/lib/LocaleContext";
 
 interface TrackListProps {
   tracks: TrackEntry[];
@@ -10,11 +11,13 @@ interface TrackListProps {
 }
 
 export default function TrackList({ tracks, onRemove, onEdit, editingId }: TrackListProps) {
+  const { t } = useLocale();
+
   if (tracks.length === 0) {
     return (
       <div className="text-center py-8 text-zinc-500">
-        <p>No tracks added yet.</p>
-        <p className="text-sm mt-1">Add a track using the form above.</p>
+        <p>{t("list.empty")}</p>
+        <p className="text-sm mt-1">{t("list.empty_hint")}</p>
       </div>
     );
   }
@@ -22,7 +25,7 @@ export default function TrackList({ tracks, onRemove, onEdit, editingId }: Track
   return (
     <div className="space-y-2">
       <h3 className="text-sm font-medium text-zinc-400 mb-3">
-        Added Tracks ({tracks.length})
+        {t("list.title")} ({tracks.length})
       </h3>
       <ul className="space-y-2">
         {tracks.map((track) => (

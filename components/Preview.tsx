@@ -1,13 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { TrackEntry, RRJson, RRJsonValue, ExtendedLyricsEntry } from "@/lib/types";
+import { TrackEntry, RRJson, ExtendedLyricsEntry } from "@/lib/types";
+import { useLocale } from "@/lib/LocaleContext";
 
 interface PreviewProps {
   tracks: TrackEntry[];
 }
 
 export default function Preview({ tracks }: PreviewProps) {
+  const { t } = useLocale();
   const [outputFilename, setOutputFilename] = useState("lyrics");
   const [copied, setCopied] = useState(false);
 
@@ -58,7 +60,7 @@ export default function Preview({ tracks }: PreviewProps) {
           htmlFor="outputFilename"
           className="block text-sm font-medium text-zinc-300 mb-1"
         >
-          Output Filename
+          {t("preview.filename")}
         </label>
         <div className="flex items-center gap-2">
           <input
@@ -75,12 +77,12 @@ export default function Preview({ tracks }: PreviewProps) {
 
       <div>
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-sm font-medium text-zinc-300">Preview</h3>
+          <h3 className="text-sm font-medium text-zinc-300">{t("preview.section")}</h3>
           <button
             onClick={handleCopy}
             className="text-sm text-rose-500 hover:text-rose-400 transition-colors"
           >
-            {copied ? "Copied!" : "Copy"}
+            {copied ? t("preview.copied") : t("preview.copy")}
           </button>
         </div>
         <pre className="p-4 bg-zinc-900 border border-zinc-700 rounded-lg text-sm text-zinc-300 overflow-x-auto max-h-64 overflow-y-auto">
@@ -105,7 +107,7 @@ export default function Preview({ tracks }: PreviewProps) {
             clipRule="evenodd"
           />
         </svg>
-        Download .rr.json
+        {t("preview.download")}
       </button>
     </div>
   );

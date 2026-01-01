@@ -2,12 +2,15 @@
 
 import { useState } from "react";
 import { TrackEntry } from "@/lib/types";
+import { useLocale } from "@/lib/LocaleContext";
 import TrackForm from "@/components/TrackForm";
 import TrackList from "@/components/TrackList";
 import Preview from "@/components/Preview";
 import FileImport from "@/components/FileImport";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export default function Home() {
+  const { t } = useLocale();
   const [tracks, setTracks] = useState<TrackEntry[]>([]);
   const [editingTrack, setEditingTrack] = useState<TrackEntry | undefined>(undefined);
 
@@ -45,11 +48,14 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-4 py-6">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-bold text-white">
-                Record Rack Lyrics Generator
-              </h1>
+              <div className="flex items-center gap-4">
+                <h1 className="text-2xl font-bold text-white">
+                  {t("app.title")}
+                </h1>
+                <LanguageSwitcher />
+              </div>
               <p className="text-zinc-400 mt-1">
-                Create .rr.json lyrics files for Record Rack
+                {t("app.subtitle")}
               </p>
             </div>
             <div className="flex-shrink-0 w-64">
@@ -64,7 +70,7 @@ export default function Home() {
           <section className="space-y-6">
             <div className="p-6 bg-zinc-900 rounded-xl border border-zinc-800">
               <h2 className="text-lg font-semibold text-white mb-4">
-                {editingTrack ? "Edit Track" : "Add Track"}
+                {editingTrack ? t("form.title.edit") : t("form.title.add")}
               </h2>
               <TrackForm
                 onAdd={handleAddTrack}
@@ -87,7 +93,7 @@ export default function Home() {
           <section>
             <div className="p-6 bg-zinc-900 rounded-xl border border-zinc-800 sticky top-8">
               <h2 className="text-lg font-semibold text-white mb-4">
-                Output
+                {t("preview.title")}
               </h2>
               <Preview tracks={tracks} />
             </div>
@@ -98,7 +104,7 @@ export default function Home() {
       <footer className="border-t border-zinc-800 mt-16">
         <div className="max-w-4xl mx-auto px-4 py-6 text-center text-zinc-500 text-sm">
           <p>
-            For use with{" "}
+            {t("footer.prefix")}{t("footer.prefix") ? " " : ""}
             <a
               href="https://github.com/kat/Record-Rack"
               target="_blank"
@@ -107,7 +113,7 @@ export default function Home() {
             >
               Record Rack
             </a>{" "}
-            iOS app
+            {t("footer.suffix")}
           </p>
         </div>
       </footer>
