@@ -14,9 +14,11 @@ export default function TrackForm({ onAdd }: TrackFormProps) {
   const [lyrics, setLyrics] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Generate filename from parts (no extension needed for matching)
-  const generatedFilename = trackNumber && songTitle
-    ? `${trackNumber.padStart(2, "0")} - ${songTitle}`
+  // Generate filename from parts (only track number is required for matching)
+  const generatedFilename = trackNumber
+    ? songTitle
+      ? `${trackNumber.padStart(2, "0")} - ${songTitle}`
+      : trackNumber.padStart(2, "0")
     : "";
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -59,7 +61,7 @@ export default function TrackForm({ onAdd }: TrackFormProps) {
             htmlFor="songTitle"
             className="block text-sm font-medium text-zinc-300 mb-1"
           >
-            Song Title
+            Song Title <span className="text-zinc-500 font-normal">(optional)</span>
           </label>
           <input
             type="text"
