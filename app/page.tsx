@@ -42,6 +42,15 @@ export default function Home() {
     setTracks((prev) => [...prev, ...importedTracks]);
   };
 
+  const handleReorderTracks = (fromIndex: number, toIndex: number) => {
+    setTracks((prev) => {
+      const newTracks = [...prev];
+      const [movedTrack] = newTracks.splice(fromIndex, 1);
+      newTracks.splice(toIndex, 0, movedTrack);
+      return newTracks;
+    });
+  };
+
   return (
     <div className="min-h-screen bg-zinc-950">
       <header className="border-b border-zinc-800">
@@ -89,6 +98,7 @@ export default function Home() {
                 tracks={tracks}
                 onRemove={handleRemoveTrack}
                 onEdit={handleEditTrack}
+                onReorder={handleReorderTracks}
                 editingId={editingTrack?.id}
               />
             </div>
