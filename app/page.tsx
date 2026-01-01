@@ -5,6 +5,7 @@ import { TrackEntry } from "@/lib/types";
 import TrackForm from "@/components/TrackForm";
 import TrackList from "@/components/TrackList";
 import Preview from "@/components/Preview";
+import FileImport from "@/components/FileImport";
 
 export default function Home() {
   const [tracks, setTracks] = useState<TrackEntry[]>([]);
@@ -17,16 +18,27 @@ export default function Home() {
     setTracks((prev) => prev.filter((t) => t.id !== id));
   };
 
+  const handleImportTracks = (importedTracks: TrackEntry[]) => {
+    setTracks((prev) => [...prev, ...importedTracks]);
+  };
+
   return (
     <div className="min-h-screen bg-zinc-950">
       <header className="border-b border-zinc-800">
         <div className="max-w-4xl mx-auto px-4 py-6">
-          <h1 className="text-2xl font-bold text-white">
-            Record Rack Lyrics Generator
-          </h1>
-          <p className="text-zinc-400 mt-1">
-            Create .rr.json lyrics files for Record Rack
-          </p>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h1 className="text-2xl font-bold text-white">
+                Record Rack Lyrics Generator
+              </h1>
+              <p className="text-zinc-400 mt-1">
+                Create .rr.json lyrics files for Record Rack
+              </p>
+            </div>
+            <div className="flex-shrink-0 w-64">
+              <FileImport onImport={handleImportTracks} />
+            </div>
+          </div>
         </div>
       </header>
 

@@ -12,6 +12,8 @@ export default function TrackForm({ onAdd }: TrackFormProps) {
   const [trackNumber, setTrackNumber] = useState("");
   const [songTitle, setSongTitle] = useState("");
   const [lyrics, setLyrics] = useState("");
+  const [lyricist, setLyricist] = useState("");
+  const [composer, setComposer] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
   // Generate filename from parts (only track number is required for matching)
@@ -29,11 +31,15 @@ export default function TrackForm({ onAdd }: TrackFormProps) {
       id: crypto.randomUUID(),
       filename: generatedFilename,
       lyrics: lyrics.trim(),
+      lyricist: lyricist.trim() || undefined,
+      composer: composer.trim() || undefined,
     });
 
     setTrackNumber("");
     setSongTitle("");
     setLyrics("");
+    setLyricist("");
+    setComposer("");
     setSearchQuery("");
   };
 
@@ -71,7 +77,7 @@ export default function TrackForm({ onAdd }: TrackFormProps) {
               setSongTitle(e.target.value);
               setSearchQuery(e.target.value);
             }}
-            placeholder="Unleash!!!!!"
+            placeholder="Title"
             className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
           />
         </div>
@@ -117,6 +123,41 @@ export default function TrackForm({ onAdd }: TrackFormProps) {
           rows={8}
           className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-y"
         />
+      </div>
+
+      <div className="grid grid-cols-2 gap-2">
+        <div>
+          <label
+            htmlFor="lyricist"
+            className="block text-sm font-medium text-zinc-300 mb-1"
+          >
+            Lyricist <span className="text-zinc-500 font-normal">(optional)</span>
+          </label>
+          <input
+            type="text"
+            id="lyricist"
+            value={lyricist}
+            onChange={(e) => setLyricist(e.target.value)}
+            placeholder="Lyrics by..."
+            className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="composer"
+            className="block text-sm font-medium text-zinc-300 mb-1"
+          >
+            Composer <span className="text-zinc-500 font-normal">(optional)</span>
+          </label>
+          <input
+            type="text"
+            id="composer"
+            value={composer}
+            onChange={(e) => setComposer(e.target.value)}
+            placeholder="Music by..."
+            className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+          />
+        </div>
       </div>
 
       <button

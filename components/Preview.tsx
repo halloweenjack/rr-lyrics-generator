@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { TrackEntry, RRJson } from "@/lib/types";
+import { TrackEntry, RRJson, RRJsonValue, ExtendedLyricsEntry } from "@/lib/types";
 
 interface PreviewProps {
   tracks: TrackEntry[];
@@ -14,7 +14,15 @@ export default function Preview({ tracks }: PreviewProps) {
   const generateJson = (): RRJson => {
     const result: RRJson = {};
     for (const track of tracks) {
-      result[track.filename] = track.lyrics;
+      // Use object format if lyricist or composer is present, otherwise simple string
+      if (track.lyricist || track.composer) {
+        const entry: ExtendedLyricsEntry = { lyrics: track.lyrics };
+        if (track.lyricist) entry.lyricist = track.lyricist;
+        if (track.composer) entry.composer = track.composer;
+        result[track.filename] = entry;
+      } else {
+        result[track.filename] = track.lyrics;
+      }
     }
     return result;
   };
