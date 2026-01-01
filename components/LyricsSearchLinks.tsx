@@ -18,12 +18,6 @@ const SEARCH_SITES = [
     icon: "U",
   },
   {
-    name: "Kashi",
-    url: (q: string) =>
-      `https://www.kget.jp/search/index.php?c=0&t=&r=&v=${encodeURIComponent(q)}`,
-    icon: "K",
-  },
-  {
     name: "Google",
     url: (q: string) =>
       `https://www.google.com/search?q=${encodeURIComponent(q + " lyrics")}`,
