@@ -96,8 +96,8 @@ export const translations = {
     "preview.download": ".rr.jsonをダウンロード",
 
     // Footer
-    "footer.prefix": "",
-    "footer.suffix": "iOSアプリ用",
+    "footer.prefix": "For use with",
+    "footer.suffix": "iOS app",
   },
 } as const;
 
