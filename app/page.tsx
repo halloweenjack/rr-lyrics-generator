@@ -55,19 +55,19 @@ export default function Home() {
     <div className="min-h-screen bg-zinc-950">
       <header className="border-b border-zinc-800">
         <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-4">
-                <h1 className="text-2xl font-bold text-white">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+                <h1 className="text-xl sm:text-2xl font-bold text-white whitespace-nowrap">
                   {t("app.title")}
                 </h1>
                 <LanguageSwitcher />
               </div>
-              <p className="text-zinc-400 mt-1">
+              <p className="text-zinc-400 mt-1 text-sm sm:text-base">
                 {t("app.subtitle")}
               </p>
             </div>
-            <div className="flex-shrink-0 w-64">
+            <div className="flex-shrink-0 w-full sm:w-64">
               <FileImport onImport={handleImportTracks} />
             </div>
           </div>
