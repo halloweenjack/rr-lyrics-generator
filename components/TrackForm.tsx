@@ -8,18 +8,15 @@ interface TrackFormProps {
   onAdd: (track: TrackEntry) => void;
 }
 
-const EXTENSIONS = [".m4a", ".mp3", ".flac", ".wav", ".aiff"];
-
 export default function TrackForm({ onAdd }: TrackFormProps) {
   const [trackNumber, setTrackNumber] = useState("");
   const [songTitle, setSongTitle] = useState("");
-  const [extension, setExtension] = useState(".m4a");
   const [lyrics, setLyrics] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Generate filename from parts
+  // Generate filename from parts (no extension needed for matching)
   const generatedFilename = trackNumber && songTitle
-    ? `${trackNumber.padStart(2, "0")} - ${songTitle}${extension}`
+    ? `${trackNumber.padStart(2, "0")} - ${songTitle}`
     : "";
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -40,7 +37,7 @@ export default function TrackForm({ onAdd }: TrackFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid grid-cols-[80px_1fr_100px] gap-2">
+      <div className="grid grid-cols-[80px_1fr] gap-2">
         <div>
           <label
             htmlFor="trackNumber"
@@ -75,26 +72,6 @@ export default function TrackForm({ onAdd }: TrackFormProps) {
             placeholder="Unleash!!!!!"
             className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
           />
-        </div>
-        <div>
-          <label
-            htmlFor="extension"
-            className="block text-sm font-medium text-zinc-300 mb-1"
-          >
-            Format
-          </label>
-          <select
-            id="extension"
-            value={extension}
-            onChange={(e) => setExtension(e.target.value)}
-            className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-          >
-            {EXTENSIONS.map((ext) => (
-              <option key={ext} value={ext}>
-                {ext}
-              </option>
-            ))}
-          </select>
         </div>
       </div>
 
