@@ -46,6 +46,10 @@ export const translations = {
     "preview.copied": "Copied!",
     "preview.download": "Download .rr.json",
 
+    // Album Notes
+    "meta.notes": "Album Notes",
+    "meta.notes_placeholder": "Liner notes, credits, or any album-wide notes...",
+
     // Footer
     "footer.prefix": "For use with",
     "footer.suffix": "iOS app",
@@ -94,6 +98,10 @@ export const translations = {
     "preview.copy": "コピー",
     "preview.copied": "コピー完了",
     "preview.download": ".rr.jsonをダウンロード",
+
+    // Album Notes
+    "meta.notes": "アルバムノート",
+    "meta.notes_placeholder": "ライナーノーツ、クレジット、アルバム全体のメモなど...",
 
     // Footer
     "footer.prefix": "For use with",

@@ -13,6 +13,7 @@ export default function Home() {
   const { t } = useLocale();
   const [tracks, setTracks] = useState<TrackEntry[]>([]);
   const [editingTrack, setEditingTrack] = useState<TrackEntry | undefined>(undefined);
+  const [albumNotes, setAlbumNotes] = useState<string>("");
 
   const handleAddTrack = (track: TrackEntry) => {
     setTracks((prev) => [...prev, track]);
@@ -38,8 +39,11 @@ export default function Home() {
     setEditingTrack(undefined);
   };
 
-  const handleImportTracks = (importedTracks: TrackEntry[]) => {
+  const handleImportTracks = (importedTracks: TrackEntry[], importedNotes?: string) => {
     setTracks((prev) => [...prev, ...importedTracks]);
+    if (importedNotes) {
+      setAlbumNotes(importedNotes);
+    }
   };
 
   const handleReorderTracks = (fromIndex: number, toIndex: number) => {
@@ -76,8 +80,8 @@ export default function Home() {
 
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left: Add/Edit Track Form */}
-          <section>
+          {/* Left: Add/Edit Track Form + Album Notes */}
+          <section className="space-y-6">
             <div className="p-6 bg-zinc-900 rounded-xl border border-zinc-800">
               <h2 className="text-lg font-semibold text-white mb-4">
                 {editingTrack ? t("form.title.edit") : t("form.title.add")}
@@ -88,6 +92,20 @@ export default function Home() {
                 onCancelEdit={handleCancelEdit}
                 editingTrack={editingTrack}
                 tracks={tracks}
+              />
+            </div>
+
+            {/* Album Notes */}
+            <div className="p-6 bg-zinc-900 rounded-xl border border-zinc-800">
+              <h2 className="text-lg font-semibold text-white mb-4">
+                {t("meta.notes")}
+              </h2>
+              <textarea
+                value={albumNotes}
+                onChange={(e) => setAlbumNotes(e.target.value)}
+                placeholder={t("meta.notes_placeholder")}
+                rows={4}
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent resize-none"
               />
             </div>
           </section>
@@ -111,7 +129,7 @@ export default function Home() {
               <h2 className="text-lg font-semibold text-white mb-4">
                 {t("preview.title")}
               </h2>
-              <Preview tracks={tracks} />
+              <Preview tracks={tracks} albumNotes={albumNotes} />
             </div>
           </section>
         </div>

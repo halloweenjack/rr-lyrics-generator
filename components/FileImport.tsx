@@ -1,32 +1,49 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { TrackEntry, RRJson, ExtendedLyricsEntry } from "@/lib/types";
+import { TrackEntry, RRJson, ExtendedLyricsEntry, MetaInfo } from "@/lib/types";
 import { useLocale } from "@/lib/LocaleContext";
 
 interface FileImportProps {
-  onImport: (tracks: TrackEntry[]) => void;
+  onImport: (tracks: TrackEntry[], albumNotes?: string) => void;
 }
 
-function parseRRJson(json: RRJson): TrackEntry[] {
-  return Object.entries(json).map(([filename, value]) => {
+interface ParseResult {
+  tracks: TrackEntry[];
+  albumNotes?: string;
+}
+
+function parseRRJson(json: RRJson): ParseResult {
+  const tracks: TrackEntry[] = [];
+  let albumNotes: string | undefined;
+
+  for (const [key, value] of Object.entries(json)) {
+    // Handle _meta separately
+    if (key === "_meta") {
+      const meta = value as MetaInfo;
+      albumNotes = meta.notes;
+      continue;
+    }
+
     if (typeof value === "string") {
-      return {
+      tracks.push({
         id: crypto.randomUUID(),
-        filename,
+        filename: key,
         lyrics: value,
-      };
-    } else {
+      });
+    } else if (value && typeof value === "object" && "lyrics" in value) {
       const entry = value as ExtendedLyricsEntry;
-      return {
+      tracks.push({
         id: crypto.randomUUID(),
-        filename,
+        filename: key,
         lyrics: entry.lyrics,
         lyricist: entry.lyricist,
         composer: entry.composer,
-      };
+      });
     }
-  });
+  }
+
+  return { tracks, albumNotes };
 }
 
 export default function FileImport({ onImport }: FileImportProps) {
@@ -52,14 +69,14 @@ export default function FileImport({ onImport }: FileImportProps) {
         return;
       }
 
-      const tracks = parseRRJson(json);
+      const { tracks, albumNotes } = parseRRJson(json);
 
-      if (tracks.length === 0) {
+      if (tracks.length === 0 && !albumNotes) {
         setError(t("import.error.empty"));
         return;
       }
 
-      onImport(tracks);
+      onImport(tracks, albumNotes);
     } catch {
       setError(t("import.error.parse_failed"));
     }

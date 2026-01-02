@@ -13,8 +13,13 @@ export interface ExtendedLyricsEntry {
   composer?: string;
 }
 
+export interface MetaInfo {
+  notes?: string;
+}
+
 export type RRJsonValue = string | ExtendedLyricsEntry;
 
 export interface RRJson {
-  [filename: string]: RRJsonValue;
+  _meta?: MetaInfo;
+  [filename: string]: RRJsonValue | MetaInfo | undefined;
 }

@@ -6,15 +6,22 @@ import { useLocale } from "@/lib/LocaleContext";
 
 interface PreviewProps {
   tracks: TrackEntry[];
+  albumNotes?: string;
 }
 
-export default function Preview({ tracks }: PreviewProps) {
+export default function Preview({ tracks, albumNotes }: PreviewProps) {
   const { t } = useLocale();
   const [outputFilename, setOutputFilename] = useState("lyrics");
   const [copied, setCopied] = useState(false);
 
   const generateJson = (): RRJson => {
     const result: RRJson = {};
+
+    // Add _meta if albumNotes is present
+    if (albumNotes && albumNotes.trim()) {
+      result._meta = { notes: albumNotes.trim() };
+    }
+
     for (const track of tracks) {
       // Use object format if lyricist or composer is present, otherwise simple string
       if (track.lyricist || track.composer) {
@@ -86,13 +93,13 @@ export default function Preview({ tracks }: PreviewProps) {
           </button>
         </div>
         <pre className="p-4 bg-zinc-900 border border-zinc-700 rounded-lg text-sm text-zinc-300 overflow-x-auto max-h-64 overflow-y-auto">
-          {tracks.length > 0 ? jsonString : "{}"}
+          {tracks.length > 0 || albumNotes ? jsonString : "{}"}
         </pre>
       </div>
 
       <button
         onClick={handleDownload}
-        disabled={tracks.length === 0}
+        disabled={tracks.length === 0 && !albumNotes}
         className="w-full py-3 px-4 bg-rose-600 hover:bg-rose-500 disabled:bg-zinc-700 disabled:text-zinc-500 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
       >
         <svg
